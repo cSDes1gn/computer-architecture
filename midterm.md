@@ -65,7 +65,7 @@
 
 The following equation determines the total number of cycles in a program (n x CPI) and divides it by the number of seconds (T) to give a metric for how long it will take a CPU to execute a set of instructions (in seconds):
 
-`Execution Time (s) = n * CPI * T`
+`Execution Time (T) = n * CPI * T`
 
 Where n is the number of instructions in the program, CPI is the average CPI of the program and T is clock period of the CPU.
 
@@ -90,5 +90,9 @@ Where IPS is instructions per second.
 > 1. Compiler A: 2800 MIPS | Execution Time: 2.5e-3 s
 > 2. Compiler B: 3200 MIPS | Execution Time: 3.75e-3 s
 > 
-> According to MIPS compiler B is *faster* in the sense that it is processing more instructions per second. However compiler A is *faster* in the sense that its execution time is less, meaning the compiler A finishes executing sooner than compiler B. Thus it is important to be concise when describing processing speed.
+> According to MIPS compiler B is *faster* in the sense that it is processing more instructions per second. This is known as *system throughput*. However compiler A is *faster* in the sense that its execution time is less, meaning the compiler A finishes executing sooner than compiler B. This is known as *system response time* Thus it is important to be concise when describing processing speed.
+
+In summary:
+- MIPS is a measure of *system throughput*, how many instructions are executed per unit time.
+- Execution time (T) is a measure of the *system response time* or the time delay to complete a certain task in seconds.
 
