@@ -83,6 +83,12 @@ General equation for computing percentage speed-ups
 
 Where IPS is instructions per second.
 
+Alternatively:
+
+`MIPS = f / CPI * 1e6`
+
+Derived from execution time T. This representation shows the functional relationship of performance parameters `f` and `CPI` to the throughput. Notably the instruction count `IC` is missing which makes `MIPS` as a performance metric worse than response time `T`. 
+
 - MIPS tells us how fast the CPU is processing instructions
 - Execution time tells us how fast a CPU can finish a set of instructions
 
