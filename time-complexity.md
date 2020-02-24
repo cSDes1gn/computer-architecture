@@ -99,4 +99,4 @@
 
 *A processor is running at 500 MHz can execute 50M lines of code in 0.25 seconds. What is the processor's average CPI? What is the MIPS rating of the processor?*
 
-> From execution time the average CPI is given by: `CPI = (T * f) / IC = (0.25s * 5e8Hz) / 50e6 = 2.5`. This is an average because we don't actually know the precise instruction count. Given a number of lines of code we can assume an instruction is equivalent to a line of code. The MIPS rating is given by: `MIPS = IC / (T * 1e6) = f / (CPI * 1e6) = 5e8Hz / (2.5 * 1e6) = 200`.
+> From execution time the average CPI is given by: `CPI = (T * f) / IC = (0.25s * 5e8Hz) / 50e6 = 2.5`. This is an average because we don't actually know the precise instruction count (we assume the number of instructions for each type of instuction is distributed equally). Given a number of lines of code we can assume an instruction is equivalent to a line of code. The MIPS rating is given by: `MIPS = IC / (T * 1e6) = f / (CPI * 1e6) = 5e8Hz / (2.5 * 1e6) = 200`.
