@@ -106,19 +106,20 @@ Instruction dependancies result from instruction sequencing and not processor ar
 
 Consider the example:
 ```nasm
+
 ops:
-    MOV R5, #10             (1)
-    LDR R6, [R3, #100]      (2)
-    ADD R4, R5, R6          (3)
-    BRA loop                (4)
-    MOV R2, #30             (5)
-    MOV R5, #40             (6)
-    MOV R1, #30             (7)
-    ADD R1, R5, R2          (8)
+    MOV R5, #10             ; (1)
+    LDR R6, [R3, #100]      ; (2)
+    ADD R4, R5, R6          ; (3)
+    BRA loop                ; (4)
+    MOV R2, #30             ; (5)
+    MOV R5, #40             ; (6)
+    MOV R1, #30             ; (7)
+    ADD R1, R5, R2          ; (8)
 
 loop: 
-    LDR R2, #[R4, #30]      (9)
-    ADD R2, R5              (10)
+    LDR R2, #[R4, #30]      ; (9)
+    ADD R2, R5              ; (10)
 ```
 
 In the pipeline at the moment instruction 4 branch execution implements at the last stage (write back to PC), instructions 5-8 are already in the pipeline and some like instruction 5 and 6 have completed memory writes modifying the system state. We want to purge the pipeline when a branch is performed but before any system state modifying actions take place (in the memory write stage).

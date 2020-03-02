@@ -58,15 +58,19 @@
 > Requires only 3 states since a specified value is being directly written to the register. so LOADi will take 3 clock cycles
 
 - CPI (Cycles per Instruction): describes the clock cycles required for each instruction.
-- CPI<sub>avg</sub> describes the sum of all CPIs divided by the total number of instructions
+- CPI<sub>avg</sub> describes the sum of all CPIs divided by the total number of instruction types (ie `MOV`, `ADD`, `SUB` ...)
 
 ## Performance Metrics
 
-The following equation determines the total number of cycles in a program (n x CPI) and divides it by the number of seconds (T) to give a metric for how long it will take a CPU to execute a set of instructions (in seconds):
+The following equation determines the total number of cycles in a program `n * CPI` and divides it by the number of seconds `T` to give a metric for how long it will take a CPU to execute a set of instructions:
 
-`Execution Time (T) = n * CPI * T`
+`Execution Time (T) = (n * CPI) / f`
 
-Where n is the number of instructions in the program, CPI is the average CPI of the program and T is clock period of the CPU. Average CPI is formulated from the assumption that each *type* of instruction yields an equal weight of all instructions across the whole program. To understand this we analyze the CPI formula: `CPI = (Σ (In * Cn)) / Σ In` where `In` is the instruction count for instruction `n` and `Cn` is the cycle count for instruction `n`. If `In` is constant across all instructions `n` we can write: `Average CPI = (I * Σ Cn) / (I * n) = Σ Cn / n`. This is the basis behind average CPI. The instructions are assumed to have equal instruction counts weight `I` which is a constant across all instruction types. Given this, we can see that a distribution of instruction counts that have a a large disparity will yield large average CPI error from the true value. For example, a program executing LOADx 500 times and a JGE twice will have a large average error since the average will assume each instruction *type* will execute once and so the execution cycles for JGE will have equal weight to the execution cycles for LOADx even though JGE only executes twice and LOADx executes 500 times.
+Where `n` is the number of instructions in the program, `CPI` is the average CPI of the program and `f` is clock speed of the CPU. 
+
+Average CPI is formulated from the assumption that each *type* of instruction yields an equal weight of all instructions across the whole program. To understand this we analyze the CPI formula: `CPI = (Σ (In * Cn)) / Σ In` where `In` is the instruction count for instruction `n` and `Cn` is the cycle count for instruction `n`. If `In` is constant across all instructions `n` we can write: `Average CPI = (I * Σ Cn) / (I * n) = Σ Cn / n`. This is the basis behind average CPI. 
+
+The instructions are assumed to have equal instruction counts weight `I` which is a constant across all instruction types. Given this, we can see that a distribution of instruction counts that have a a large disparity will yield large average CPI error from the true value. For example, a program executing LOADx 500 times and a JGE twice will have a large average error since the average will assume each instruction *type* will execute once and so the execution cycles for JGE will have equal weight to the execution cycles for LOADx even though JGE only executes twice and LOADx executes 500 times.
 
 We can reduce CPI by:
 1. Von Neumann architecture with one memory for instructions and data which reduces data fetch redundancy
@@ -76,7 +80,7 @@ General equation for computing percentage speed-ups
 
 `% Speed-Up = 100 * (prev-curr) / curr`
 
-- Harvard Architecture introduces a seperate data memory and bus for loading and storing data. This allows for pre-fetches for STORE instructions. However pre-fetches still cannot happen during conditional jumps since the next instruction is unknown.
+>**Harvard Architecture** introduces a seperate data memory and bus for loading and storing data. This allows for pre-fetches for STORE instructions. However pre-fetches still cannot happen during conditional jumps since the next instruction is unknown.
 
 `MIPS = IPS / 1e6`
 
@@ -125,15 +129,25 @@ In summary:
 
 *How fast would a compter have to perform each operation to complete the 64-disk solution in a day?*
 
-> In order for a computer to achieve `1.8446744e19` operations in the span of a day or `86400` seconds it would have to processing at `1.8446744e19 ins / 86400 sec` or `2.1350398e+14 ins/sec` which is 214 trillion instructions per second. The fastest CPU we have available is an AMD Piledriver based FX-8370 chip which has a clock speed of `8.723 GHz` or the theoretical ability of performing `T = 1 / 8.723e9 = 1.1463946e-10 sec` and `1 ins / 1.1463946e-10 sec = 8722999916.43 ins/sec` which is just the CPU frequency in (Hz). Using performance analysis: `% Increase = 100% * (8722999916.43 ins/sec - 2.1350398e+14 ins/sec) / 8722999916.43 ins/sec = 24474.98 % increase`. So we see that we are not even close to being capable of solving this problem in a day via modern computing.
+> In order for a computer to achieve `1.8446744e19` operations in the span of a day or `86400` seconds it would have to processing at `1.8446744e19 ins / 86400 sec` or `2.1350398e+14 ins/sec` which is 214 trillion instructions per second. We can reframe the problem by finding the seconds seconds per instruction:
+>
+>`1 / 2.14e+14 ins/sec = 0.00467 ps/ins`
+>
+>Therefore a computer would have to perform complete an instruction in 0.00467 pico seconds.
+>
+> The fastest CPU we have available is an AMD Piledriver based FX-8370 chip which has a clock speed of `8.723 GHz` or the theoretical ability of performing `T = 1 / 8.723e9 = 1.1463946e-10 sec` and `1 ins / 1.1463946e-10 sec = 8722999916.43 ins/sec` which is just the CPU frequency in (Hz). Using performance analysis: 
+> 
+> `% Increase = 100% * (8722999916.43 ins/sec - 2.1350398e+14 ins/sec) / 8722999916.43 ins/sec = 24474.98 % increase`
+> 
+> So we see that we are not even close to being capable of solving this problem in a day via modern computing.
 
-*If a computer could complete an operation in once CPU clock cycle, what CPU clock frequency would be needed to complete this operation in a day*
+*If a computer could complete an operation in one CPU clock cycle, what CPU clock frequency would be needed to complete this operation in a day*
 
 > From previous answer the clockspeed of the CPU that is capable of completing this problem in a day would have to be `2.135e14 Hz` or `214 THz`.
 
 *Based on the answer given above, given today's typical CPU clock frequencies, is completing the 64-disk solution tractable or intractable?*
 
-> Tractable solution: A problem is said to be tractable if there is an algorithm that, given an input n, can solve the problem in O(n<sup>c</sup>), where c is a constant that depends that problem. However, intractable problems allows exponential complexity versus input increase (O(c<sup>n</sup>)). This problem therefore is intractable since the time complexity of the towers of hanoi is O(2<sup>n</sup>)
+> Tractable solution: A problem is said to be tractable if there is an algorithm that, given an input n, can solve the problem in O(n<sup>c</sup>), where c is a constant degree independant of input size n. However, intractable problems have the input space as the degree: O(c<sup>n</sup>). This problem therefore is intractable since the time complexity of the towers of hanoi is O(2<sup>n</sup>) with the input size being the degree of the time complexity.
 
 *Under what condition does increasing the processor	clock frequency	by a factor of X also result in	a factor of	X increase in the size of a problem	that can be	computed tractably? Describe a problem that can	be solved with an algorithm that meets the condition.*
 
@@ -163,7 +177,17 @@ In summary:
 
 *What does it mean to say that X is N times faster than Y*
 
-> Again, *faster* can refer to system *throughput* or *response time*. However as a general speed metric we use execution time: `T = (IC * CPI) / f`. Then if computer X executes a benchmark program with instruction count `IC` T<sub>x</sub> and computer Y executes the same benchmark T<sub>y</sub> then we can relate the two execution speeds by `N`: `Ty = N * Tx`. If we take the inverse of `T` we can get a performance metric *p<sub>x* and *p<sub>y*: `N * px = py`.
+> Again, *faster* can refer to system *throughput* or *response time*. However as a general speed metric we use execution time:
+> 
+> `T = (IC * CPI) / f`
+> 
+> Then if computer X executes a benchmark program with instruction count `IC` T<sub>x</sub> and computer Y executes the same benchmark T<sub>y</sub> then we can relate the two execution speeds by `N`: 
+> 
+> `Ty = N * Tx`
+> 
+> This is a representation of the time it takes to complete a process. If we take the inverse of `T` we can get a performance metric *p<sub>x* and *p<sub>y* represented as a processing speed *f* in Hz: 
+> 
+> `N * px = py`
 
 *What is the clock cycle time of a processor with a 100 MHz clock*
 
