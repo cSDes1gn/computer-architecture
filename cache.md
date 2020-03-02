@@ -64,4 +64,8 @@ Only relevant for architectures that use associative mapping since for direct ma
 
 >**LFU**: Least Frequently Used keeps a running count of line uses and replaces the line with the fewest uses.
 
->**Random**: Unintelligent cache policy that saves memory (no running count of line analytics) and is easier to implement.
+>**Random**: Unintelligent cache policy that saves memory (no running count of line analytics) and is easier to implement. Bad idea to implement if instructions and data are stored in cache because it may cause instructions that are used frequently to be replaced by data used infrequently.
+
+## Addressing Basics
+
+**Addressable Words** refers to the quantity of data grabbed in an addressing operation. If a system is organized as 16-bit addressable words then the address space would be organized in increments of 2B. So addressing operations will be functioning by reading/writing 2B worth of address space.
