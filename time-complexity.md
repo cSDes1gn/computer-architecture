@@ -101,6 +101,8 @@ Derived from execution time T. This representation shows the functional relation
 > 
 > According to MIPS compiler B is *faster* in the sense that it is processing more instructions per second. This is known as *system throughput*. However compiler A is *faster* in the sense that its execution time is less, meaning the compiler A finishes executing sooner than compiler B. This is known as *system response time* Thus it is important to be concise when describing processing speed.
 
+MFLOPS describes the number of million floating point operations and can be obtained the same way as MIPS except by only including the floating point operations: `MFLOPS = f / FLOPS CPI * 1e6`
+
 In summary:
 - MIPS is a measure of *system throughput*, how many instructions are executed per unit time.
 - Execution time (T) is a measure of the *system response time* or the time delay to complete a certain task in seconds.
